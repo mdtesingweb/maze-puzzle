@@ -18,6 +18,10 @@
   var store = null;
   try { store = CMStorage.create(window.localStorage); } catch (e) { store = CMStorage.create(null); }
   var progress = store.load();
+  if (progress.levelsVersion !== 2) { // V7.2: đánh dấu dữ liệu đã sang bộ màn mới (giữ nguyên màn đã mở/đã xong, robot đã chọn)
+    progress.levelsVersion = 2;
+    store.save(progress);
+  }
   var robot = progress.robot || null; // {gender:'boy'|'girl', name} — trẻ chọn ở intro
   var level = null, parsed = null, levelIdx = 0;
   var editor = null;
@@ -192,6 +196,15 @@
   $('introGirl').addEventListener('click', function () { introSel = 'girl'; markIntroSel(); CMAudio.click(); });
   $('btnStartIntro').addEventListener('click', closeIntroSave);
   $('btnChangeRobot').addEventListener('click', function () { CMAudio.click(); openIntro(); });
+
+  // Gợi ý xoay ngang: chỉ hiện ở điện thoại dọc (CSS), bấm "Đã hiểu" là tắt hẳn các lần sau.
+  try {
+    if (localStorage.getItem('cmr.hideRotate') === '1') $('rotateHint').classList.add('hidden');
+  } catch (e) {}
+  $('btnHideRotate').addEventListener('click', function () {
+    $('rotateHint').classList.add('hidden');
+    try { localStorage.setItem('cmr.hideRotate', '1'); } catch (e) {}
+  });
 
   // ---------- thực thi ----------
   function setStatus(msg) { $('statusMsg').textContent = personalize(msg); }

@@ -1,6 +1,8 @@
 # Coding Maze Rescue — Robot Bíp giải cứu bạn
 
-Game giải đố mê cung kết hợp lập trình trực quan cho trẻ 8–12 tuổi (bản prototype V7.1, phát triển từ nghiên cứu Muse V7 — concept thắng giải C1 "Đội Cứu Hộ Lệnh": khung giải cứu bạn + màn sửa lỗi là một thể loại màn chính thức).
+Game giải đố mê cung kết hợp lập trình trực quan cho trẻ 8–12 tuổi (bản V7.2, phát triển từ nghiên cứu Muse V7 — concept thắng giải C1 "Đội Cứu Hộ Lệnh": khung giải cứu bạn + màn sửa lỗi là một thể loại màn chính thức).
+
+**V7.2 ưu tiên điện thoại nằm ngang:** xoay điện thoại ngang là mê cung nằm bên trái, bảng lệnh nằm bên phải, cụm nút RUN/Từng bước/Làm lại luôn nhìn thấy cùng lúc với robot — không cần cuộn cả trang. Mở điện thoại dọc vẫn chơi được, game hiện một dòng gợi ý xoay ngang (bấm "Đã hiểu" là tắt hẳn).
 
 Trẻ chạm để xếp các khối lệnh (Đi tới, Rẽ trái, Rẽ phải, Nhảy, Lặp lại), bấm **RUN** và xem Robot Bíp chạy chương trình qua mê cung để giải cứu người bạn bị kẹt trong bong bóng ở cuối đường. Sai thì robot phản ứng dễ thương, khối lệnh gây lỗi sáng đỏ — sửa lại rồi chạy tiếp, không phạt, không giới hạn số lần thử.
 
@@ -25,12 +27,12 @@ Tiến trình (màn đã mở, màn đã cứu, tắt/bật tiếng) được l�
 | Nhóm | Màn | Nội dung |
 |---|---|---|
 | Làm quen | 1–3 | Đi tới; rẽ phải; màn 3 là **màn sửa lỗi** đầu tiên (chương trình có sẵn bị sai) |
-| Giải mê cung | 4–6 | Hành lang quanh co, ngõ cụt đánh lừa, đi vòng quanh hồ — cứu bạn thứ 5 |
-| Thử thách mới | 7–9 | Xuất hiện **hố** và lệnh **Nhảy**; màn 9 là màn sửa lỗi cú nhảy |
-| Khám phá vòng lặp | 10–12 | Giới thiệu **Lặp lại** trực quan; màn 11 (tối đa 6 khối) và 12 (tối đa 5 khối) buộc trẻ tự khám phá vì sao Lặp lại tiện hơn |
-| Kết hợp kỹ năng | 13–15 | Mê cung dài; màn 14 **sửa lỗi vòng lặp**; màn 15 giải cứu Bạn Sao dùng mọi kỹ năng |
+| Mê cung có lựa chọn | 4–6 | **Ngã ba thật**: màn 4 có hai đường đi đều tới nơi; màn 5 đường thẳng bị tường chặn phải đi vòng; màn 6 đường tắt trông ngắn nhất lại là **ngõ cụt** |
+| Hố và Nhảy | 7–9 | Xuất hiện **hố** và lệnh **Nhảy**; màn 7 nhảy bắt buộc; màn 8 **nhảy tắt hoặc đi vòng đều được** (trẻ tự chọn); màn 9 là màn sửa lỗi cú nhảy |
+| Quy luật lặp | 10–12 | **Lặp lại** gắn với cấu trúc mê cung thật: màn 10 cầu thang 3 bậc (tối đa 7 khối), màn 11 hai gian phòng giống nhau + đoạn cuối **không được lặp** (tối đa 10 khối), màn 12 ba nhịp cầu giống nhau (tối đa 5 khối, lặp thiếu là dừng giữa đường) |
+| Kết hợp kỹ năng | 13–15 | Nhiều vùng, nhiều quyết định: màn 13 ngã ba + cầu thang lặp + nhảy; màn 14 **sửa hai lỗi** (sai số lần lặp + sai một lệnh rẽ); màn 15 giải cứu Bạn Sao 12×12 dùng mọi kỹ năng |
 
-Có đúng 3 màn sửa lỗi (3, 9, 14) theo thiết kế. Không màn nào giới hạn số lệnh tùy tiện: chỉ màn 11/12 có giới hạn khối và gợi ý trong game giải thích rõ lý do (để học Lặp lại), lời giải mẫu luôn vừa giới hạn.
+Có đúng 3 màn sửa lỗi (3, 9, 14) theo thiết kế. Không màn nào giới hạn số lệnh tùy tiện: chỉ màn 10/11/12 có giới hạn khối và gợi ý trong game giải thích rõ lý do (để học Lặp lại), lời giải mẫu luôn vừa giới hạn. Chi tiết từng màn (kích thước, ngã rẽ/ngõ cụt, kỹ năng, độ khó dự kiến, kiểm chứng) xem `docs/LEVEL_QUALITY.md`; thay đổi so với V7.1 xem `docs/CHANGELOG_V7.2.md`.
 
 ## Kiến trúc
 
@@ -55,9 +57,9 @@ Toàn bộ là JavaScript thuần, không framework, không thư viện ngoài, 
 
 ## Kiểm thử
 
-Chạy: `node tests/run-tests.js` (logic + lời giải) và `node tests/run-ui-test.js` (hồi quy giao diện bằng DOM stub: vị trí/hướng của Robot ngay khi mở màn và khi chuyển màn).
+Chạy: `node tests/run-tests.js` (logic + lời giải), `node tests/run-ui-test.js` (hồi quy giao diện bằng DOM stub: vị trí/hướng của Robot ngay khi mở màn và khi chuyển màn), `node tests/validate-levels.js` (kiểm tra chất lượng mê cung: BFS đường đi, ngã rẽ/ngõ cụt, bẫy và đường thay thế), và `node tests/browser-qa.js` (QA trình duyệt thật: click DOM thật quét 15 màn + kiểm tra landscape 4 viewport + chụp ảnh).
 
-Bao phủ: MOVE / TURN LEFT / TURN RIGHT (đủ 4 hướng), JUMP hợp lệ và 3 kiểu JUMP không hợp lệ, REPEAT (kèm số vòng), chạm tường, rơi hố, chạy hết chương trình chưa tới đích, hoàn thành màn, reset/chạy lại sau khi sửa lệnh, tính xác định (cùng đầu vào → cùng kết quả), giới hạn bước chống treo, lưu/mở khóa level, dữ liệu lưu hỏng, và **kiểm chứng lời giải mẫu của cả 15 màn bằng chính engine của game** (kèm kiểm tra chương trình sai sẵn ở 3 màn sửa lỗi không thắng được, và lời giải vừa giới hạn khối ở màn 11/12).
+Bao phủ: MOVE / TURN LEFT / TURN RIGHT (đủ 4 hướng), JUMP hợp lệ và 3 kiểu JUMP không hợp lệ, REPEAT (kèm số vòng, kể cả lồng nhau), chạm tường, rơi hố, chạy hết chương trình chưa tới đích, hoàn thành màn, reset/chạy lại sau khi sửa lệnh, tính xác định (cùng đầu vào → cùng kết quả), giới hạn bước chống treo, lưu/mở khóa level, dữ liệu lưu hỏng, và **kiểm chứng lời giải mẫu của cả 15 màn bằng chính engine của game** (kèm kiểm tra chương trình sai sẵn ở 3 màn sửa lỗi không thắng được, và lời giải vừa giới hạn khối ở màn 10/11/12).
 
 Kết quả tại thời điểm bàn giao: xem `KNOWN_ISSUES.md` và phần bàn giao trong chat — chỉ những gì đã chạy thật mới được ghi PASS.
 
@@ -66,7 +68,7 @@ Kết quả tại thời điểm bàn giao: xem `KNOWN_ISSUES.md` và phần bà
 - **Thêm lệnh bằng chạm (tap-to-add), đổi thứ tự bằng kéo**: chạm để thêm khối vì thao tác này tin cậy nhất trên điện thoại; đổi thứ tự bằng cách giữ và kéo khối (chuột kéo trực tiếp trên khối, cảm ứng nắm tay cầm ⋮⋮ ở đầu khối để không lẫn với cuộn trang), kéo vào/ra khối Lặp cũng được. Nút Trước/Sau vẫn giữ làm cách dự phòng.
 - **REPEAT lồng nhau tối đa 2 cấp**: engine vốn chạy bằng ngăn xếp khung lặp nên thực thi vòng-lồng-vòng đã đúng sẵn; bản đầu khóa tính năng này ở editor cho đơn giản, nay mở theo yêu cầu thực tế — trẻ bấm/kéo thả REPEAT vào trong REPEAT được, cấp 3 bị chặn để chương trình không rối. Sự kiện chạy mang thông tin vòng lặp trong nhất (huy hiệu "vòng i/n" hiện ở khối Lặp con khi đang chạy trong nó).
 - **Không sao/điểm, không phạt lời giải dài** (đúng khuyến nghị V7): phần thưởng là cứu được bạn và mở màn mới.
-- **Giới hạn khối chỉ ở màn 11/12** và luôn có lời giải thích trong gợi ý của màn.
+- **Giới hạn khối chỉ ở màn 10/11/12** và luôn có lời giải thích trong gợi ý của màn.
 - Robot tên **Bíp**; 15 người bạn là các con vật/bạn nhỏ vẽ vector gốc (Gà Mơ, Mèo Miu, Thỏ Bông, …, Bạn Sao ở màn cuối).
 
 ## Mở rộng về sau

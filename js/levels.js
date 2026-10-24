@@ -1,5 +1,7 @@
-// Coding Maze Rescue — dữ liệu 15 level (theo docs/SPEC.md).
-// Block không có id: {type:'MOVE'|'LEFT'|'RIGHT'|'JUMP'} hoặc {type:'REPEAT', count, body:[...]}.
+// Coding Maze Rescue — dữ liệu 15 level V7.2 (theo docs/SPEC.md).
+// V7.2: mê cung có lựa chọn thật (ngã rẽ, ngõ cụt, đường vòng, đường tắt bị chặn),
+// không còn là hành lang đơn. Block không có id: {type:'MOVE'|'LEFT'|'RIGHT'|'JUMP'}
+// hoặc {type:'REPEAT', count, body:[...]}. Mọi màn đã qua tests/validate-levels.js.
 (function () {
   'use strict';
 
@@ -36,28 +38,28 @@
       solution: [L(), M(), M()]
     },
     {
-      n: 4, name: 'Hành lang quanh co', friend: 'Cún Nâu',
-      story: 'Cún Nâu bị lạc trong hành lang quanh co như mê cung, Robot phải đi vòng vèo mới tới được chỗ bạn ấy.',
-      hint: 'Tới cuối mỗi hành lang thì dừng lại nhìn xem đường đi rẽ về hướng nào.',
-      grid: ['######', '#S...#', '####.#', '#....#', '#.####', '#...F#'],
+      n: 4, name: 'Ngã ba đầu tiên', friend: 'Cún Nâu',
+      story: 'Cún Nâu ở góc dưới bên phải. Từ chỗ bắt đầu có hai đường đi — một đường vòng lên trên, một đường đi xuống dưới, cả hai đều tới nơi. Em chọn đường nào?',
+      hint: 'Nhìn kỹ cả hai hướng trước khi viết lệnh: đi lên trên thì vòng vèo, đi xuống dưới thì thẳng hơn một chút.',
+      grid: ['########', '#S..#..#', '#.#.#..#', '#.#....#', '#.####.#', '#.....F#', '########'],
       startDir: 'E', tools: ['MOVE', 'LEFT', 'RIGHT'],
-      solution: [M(), M(), M(), R(), M(), M(), R(), M(), M(), M(), L(), M(), M(), L(), M(), M(), M()]
+      solution: [M(), M(), R(), M(), M(), L(), M(), M(), M(), R(), M(), M()]
     },
     {
-      n: 5, name: 'Ngõ cụt bí mật', friend: 'Chim Sẻ',
-      story: 'Chim Sẻ trốn ở góc xa của mê cung, nhưng có một lối đi giả đang đánh lừa Robot đấy!',
-      hint: 'Có một lối là ngõ cụt — hãy đi xuống trước, đừng đi thẳng sang phải.',
-      grid: ['######', '#S.#F#', '#.##.#', '#....#', '######'],
-      startDir: 'S', tools: ['MOVE', 'LEFT', 'RIGHT'],
-      solution: [M(), M(), L(), M(), M(), M(), L(), M(), M()]
+      n: 5, name: 'Đường thẳng bị chặn', friend: 'Chim Sẻ',
+      story: 'Chim Sẻ ở ngay phía trước mặt, nhìn thấy rõ luôn! Nhưng có một bức tường chắn ngang giữa đường — đi thẳng là đâm vào tường đấy.',
+      hint: 'Đường thẳng bị chặn rồi. Thử đi vòng xuống dưới rồi vòng lên lại xem sao.',
+      grid: ['#######', '#S..#F#', '#.#.#.#', '#.....#', '#######'],
+      startDir: 'E', tools: ['MOVE', 'LEFT', 'RIGHT'],
+      solution: [M(), M(), R(), M(), M(), L(), M(), M(), L(), M(), M()]
     },
     {
-      n: 6, name: 'Vòng quanh hồ', friend: 'Ếch Xanh',
-      story: 'Ếch Xanh ngồi ở bờ bên kia của chiếc hồ dài, Robot phải đi vòng hết một vòng mới gặp được bạn ấy.',
-      hint: 'Đi vòng quanh hồ: tới cuối đường thì rẽ phải, đi xuống, rồi rẽ phải lần nữa.',
-      grid: ['#######', '#S....#', '#####.#', '#F....#', '#######'],
+      n: 6, name: 'Đường tắt là ngõ cụt', friend: 'Ếch Xanh',
+      story: 'Ếch Xanh ở góc dưới bên phải. Đường đi thẳng lên trên trông ngắn nhất, nhưng coi chừng — nó dẫn vào ngõ cụt đấy!',
+      hint: 'Có hai hướng đi từ chỗ bắt đầu. Một hướng là ngõ cụt — hãy thử hướng còn lại.',
+      grid: ['#########', '#S......#', '#.#####.#', '#.#...###', '#...#..F#', '#########'],
       startDir: 'E', tools: ['MOVE', 'LEFT', 'RIGHT'],
-      solution: [M(), M(), M(), M(), R(), M(), M(), R(), M(), M(), M(), M()]
+      solution: [R(), M(), M(), M(), L(), M(), M(), L(), M(), R(), M(), M(), R(), M(), L(), M(), M()]
     },
     {
       n: 7, name: 'Cái hố đầu tiên', friend: 'Heo Hồng',
@@ -68,12 +70,12 @@
       solution: [M(), J()]
     },
     {
-      n: 8, name: 'Nhảy qua góc vườn', friend: 'Gấu Mật',
-      story: 'Gấu Mật chờ ở góc vườn phía dưới, Robot phải nhảy qua hố rồi đi một vòng dài mới tới nơi.',
-      hint: 'Nhảy qua hố, đi tới cuối hàng, vòng xuống rồi đi ngược lại về phía trái.',
-      grid: ['########', '#S.H...#', '######.#', '#F.....#', '########'],
+      n: 8, name: 'Nhảy tắt hay đi vòng?', friend: 'Gấu Mật',
+      story: 'Gấu Mật ở cuối đường. Nhảy qua hố thì tới nhanh, nhưng đi vòng xuống dưới cũng tới nơi — em thích cách nào hơn?',
+      hint: 'Thử cả hai cách: một cách dùng lệnh Nhảy, một cách chỉ đi bộ vòng xuống dưới.',
+      grid: ['#########', '#S.H...F#', '#.#####.#', '#.......#', '#########'],
       startDir: 'E', tools: ['MOVE', 'LEFT', 'RIGHT', 'JUMP'],
-      solution: [M(), J(), M(), M(), R(), M(), M(), R(), M(), M(), M(), M(), M()]
+      solution: [M(), J(), M(), M(), M()]
     },
     {
       n: 9, name: 'Sửa cú nhảy', friend: 'Cáo Cam',
@@ -85,55 +87,56 @@
       solution: [M(), J(), M(), R(), M(), M(), R(), M(), M()]
     },
     {
-      n: 10, name: 'Bước đều bước', friend: 'Khỉ Con',
-      story: 'Khỉ Con ở cuối một con đường thẳng dài — Robot sẽ phải bước đều, bước đều mãi mới tới!',
-      hint: 'Thử dùng khối Lặp lại ×4 với lệnh Đi tới ở trong, Robot sẽ tự bước 4 lần.',
-      grid: ['#######', '#S...F#', '#######'],
-      startDir: 'E', tools: ['MOVE', 'REPEAT'],
-      solution: [REP(4, [M()])]
-    },
-    {
-      n: 11, name: 'Cầu thang xoáy', friend: 'Vịt Vàng',
-      story: 'Vịt Vàng ở dưới chân cầu thang xoáy, mỗi bậc thang đều giống hệt bậc trước — thật là một mẫu lệnh hoàn hảo!',
-      hint: 'Màn này chỉ dùng tối đa 6 khối — hãy dùng khối Lặp lại để đi lại một mẫu lệnh.',
-      grid: ['#######', '#S.####', '##..###', '###..##', '####..#', '#####F#', '#######'],
+      n: 10, name: 'Cầu thang ba bậc', friend: 'Khỉ Con',
+      story: 'Khỉ Con ở cuối cầu thang có ba bậc giống hệt nhau. Mỗi bậc đều là: đi, rẽ phải, đi, rẽ trái — một mẫu lệnh hoàn hảo để lặp lại!',
+      hint: 'Màn này chỉ dùng tối đa 7 khối. Dùng khối Lặp lại ×3 với mẫu bốn lệnh trong, rồi đi thêm 1 bước nữa.',
+      grid: ['#######', '#S.####', '##..###', '###..##', '####.F#', '#######'],
       startDir: 'E', tools: ['MOVE', 'LEFT', 'RIGHT', 'REPEAT'],
-      maxBlocks: 6,
-      solution: [REP(4, [M(), R(), M(), L()])]
+      maxBlocks: 7,
+      solution: [REP(3, [M(), R(), M(), L()]), M()]
     },
     {
-      n: 12, name: 'Ba cái hố đều nhau', friend: 'Nhím Nhỏ',
-      story: 'Nhím Nhỏ ở cuối con đường có ba cái hố giống hệt nhau xếp đều tăm tắp đang chờ Robot tới cứu.',
-      hint: 'Màn này chỉ dùng tối đa 5 khối — ba cái hố giống hệt nhau, hãy dùng khối Lặp lại với mẫu: đi, đi, nhảy.',
-      grid: ['###############', '#S..H...H...HF#', '###############'],
+      n: 11, name: 'Hai gian phòng giống nhau', friend: 'Vịt Vàng',
+      story: 'Vịt Vàng ở sau hai gian phòng giống hệt nhau, rồi tới một đoạn đường khác hẳn. Đoạn nào nên lặp, đoạn nào thì không?',
+      hint: 'Màn này chỉ dùng tối đa 10 khối. Chỉ lặp phần giống nhau thôi — đoạn cuối khác hẳn thì đừng nhét vào trong Lặp.',
+      grid: ['########', '#S..####', '###...##', '#####.##', '#####.##', '#####F##', '########'],
+      startDir: 'E', tools: ['MOVE', 'LEFT', 'RIGHT', 'REPEAT'],
+      maxBlocks: 10,
+      solution: [REP(2, [M(), M(), R(), M(), L()]), R(), M(), M()]
+    },
+    {
+      n: 12, name: 'Ba nhịp cầu', friend: 'Nhím Nhỏ',
+      story: 'Nhím Nhỏ ở cuối con đường có ba nhịp cầu giống hệt nhau: đi, nhảy, đi. Lặp thiếu một nhịp là dừng giữa đường đấy!',
+      hint: 'Màn này chỉ dùng tối đa 5 khối. Mẫu lệnh là: đi, nhảy, đi — lặp đúng 3 lần.',
+      grid: ['###############', '#S.H...H...H.F#', '###############'],
       startDir: 'E', tools: ['MOVE', 'JUMP', 'REPEAT'],
       maxBlocks: 5,
-      solution: [REP(3, [M(), M(), J()])]
+      solution: [REP(3, [M(), J(), M()])]
     },
     {
-      n: 13, name: 'Đường rắn dài', friend: 'Cừu Mây',
-      story: 'Cừu Mây bị lạc ở cuối con đường rắn uốn lượn qua ba hàng dài, Robot phải kiên nhẫn đi hết mới tới nơi.',
-      hint: 'Đường đi uốn qua lại như con rắn: đi hết một hàng thì rẽ xuống hàng tiếp theo.',
-      grid: ['#########', '#S......#', '#######.#', '#.......#', '#.#######', '#......F#', '#########'],
-      startDir: 'E', tools: ['MOVE', 'LEFT', 'RIGHT', 'REPEAT'],
-      solution: [M(), M(), M(), M(), M(), M(), R(), M(), M(), R(), M(), M(), M(), M(), M(), M(), L(), M(), M(), L(), M(), M(), M(), M(), M(), M()]
+      n: 13, name: 'Hành trình ba chặng', friend: 'Cừu Mây',
+      story: 'Cừu Mây ở cuối một hành trình dài: đầu tiên chọn đường ở ngã ba, rồi leo cầu thang lặp lại, cuối cùng nhảy qua hố để tới nơi!',
+      hint: 'Chia hành trình thành ba chặng: ngã ba thì tránh ngõ cụt, cầu thang thì dùng Lặp lại, cuối cùng nhớ Nhảy qua hố.',
+      grid: ['############', '#S.......###', '###.#.######', '###.#...####', '######..####', '#######..HF#', '############'],
+      startDir: 'E', tools: ['MOVE', 'LEFT', 'RIGHT', 'JUMP', 'REPEAT'],
+      solution: [M(), M(), M(), M(), R(), M(), M(), L(), REP(2, [M(), R(), M(), L()]), M(), J()]
     },
     {
-      n: 14, name: 'Sửa vòng lặp', friend: 'Rùa Chậm',
-      story: 'Rùa Chậm chờ ở cuối đường, chương trình có sẵn chạy gần tới nơi nhưng dừng sớm một chút — hãy sửa số lần lặp cho đúng nhé!',
-      hint: 'Đếm số ô còn thiếu ở đoạn đường thứ hai, rồi tăng số lần lặp của khối Lặp lại đó lên.',
-      grid: ['#######', '#S....#', '#####.#', '#####.#', '#####.#', '#####F#', '#######'],
-      startDir: 'E', tools: ['MOVE', 'RIGHT', 'REPEAT'],
-      prefill: [REP(4, [M()]), R(), REP(3, [M()])],
-      solution: [REP(4, [M()]), R(), REP(4, [M()])]
+      n: 14, name: 'Sửa hai lỗi', friend: 'Rùa Chậm',
+      story: 'Rùa Chậm chờ ở cuối đường, nhưng chương trình có sẵn có tới HAI chỗ sai: số lần lặp chưa đủ, và có một lệnh rẽ sai ở cuối. Tìm cả hai nhé!',
+      hint: 'Chạy thử rồi đếm lại: cầu thang cần lặp mấy lần? Và lệnh rẽ cuối cùng có đúng hướng không?',
+      grid: ['###########', '#S#########', '#.#########', '#...#...HF#', '#.##..#####', '#....######', '###########'],
+      startDir: 'E', tools: ['MOVE', 'LEFT', 'RIGHT', 'JUMP', 'REPEAT'],
+      prefill: [R(), M(), M(), M(), M(), L(), M(), M(), REP(1, [M(), L(), M(), R()]), M(), R(), J()],
+      solution: [R(), M(), M(), M(), M(), L(), M(), M(), REP(2, [M(), L(), M(), R()]), M(), M(), J()]
     },
     {
       n: 15, name: 'Giải cứu Bạn Sao', friend: 'Bạn Sao',
-      story: 'Nhiệm vụ giải cứu cuối cùng: Bạn Sao đang chờ ở nơi sâu nhất của mê cung — hãy dùng mọi kỹ năng đã học để tới cứu bạn ấy!',
-      hint: 'Xuống cầu thang bằng khối Lặp lại, rồi dùng lệnh Nhảy qua cái hố cuối cùng ngay trước chỗ Bạn Sao.',
-      grid: ['########', '#S.#####', '##..####', '###..###', '####..##', '#####H##', '#####F##', '########'],
+      story: 'Nhiệm vụ cuối cùng! Bạn Sao ở nơi sâu nhất của mê cung: qua ngã ba, nhảy qua hố, leo cầu thang lặp lại — và coi chừng ngõ cụt ở gần đích!',
+      hint: 'Đi từng chặng một: tránh ngõ cụt ở ngã ba, nhảy qua hố, leo cầu thang bằng Lặp lại, rồi đừng rẽ nhầm vào ngõ cụt cuối.',
+      grid: ['############', '#S....######', '###.#.######', '###.#.######', '#####.######', '#####..H.###', '#######..###', '########.###', '########..##', '#########..#', '##########F#', '############'],
       startDir: 'E', tools: ['MOVE', 'LEFT', 'RIGHT', 'JUMP', 'REPEAT'],
-      solution: [REP(3, [M(), R(), M(), L()]), M(), R(), J()]
+      solution: [M(), M(), M(), M(), R(), M(), M(), M(), M(), L(), M(), J(), R(), M(), M(), M(), L(), REP(2, [M(), R(), M(), L()])]
     }
   ];
 

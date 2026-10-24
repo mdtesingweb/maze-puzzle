@@ -103,14 +103,14 @@ check('Chuyển màn 3: robot ở ô xuất phát (1,3), không đè lên Thỏ 
   r3 && r3.cx === c3.cx && r3.cy === c3.cy,
   r3 ? 'robot tại (' + r3.cx + ',' + r3.cy + '), kỳ vọng (' + c3.cx + ',' + c3.cy + ')' : 'chưa vẽ robot');
 
-// 3) Chuyển sang màn 5 (xuất phát quay mặt Nam): robot đúng ô + đúng hướng Nam
+// 3) Chuyển sang màn 5 (V7.2: xuất phát quay mặt Đông, không còn quay mặt Nam như V7.1)
 byId.btnLevels.click();
 gridBtns = byId.levelGrid.children.slice(-15);
 gridBtns[4].click();
 pumpFrame(3000);
 var r5 = lastRobot(), c5 = center(1, 1);
-check('Chuyển màn 5: robot ở ô xuất phát và quay mặt Nam',
-  r5 && r5.cx === c5.cx && r5.cy === c5.cy && Math.abs(r5.angle - Math.PI / 2) < 1e-9,
+check('Chuyển màn 5: robot ở ô xuất phát và quay mặt Đông',
+  r5 && r5.cx === c5.cx && r5.cy === c5.cy && Math.abs(r5.angle - 0) < 1e-9,
   r5 ? 'robot tại (' + r5.cx + ',' + r5.cy + ') góc ' + r5.angle : 'chưa vẽ robot');
 
 // 4) moveBlock (hàm lõi của tính năng kéo khối): đổi thứ tự + chuyển giữa các danh sách
@@ -157,6 +157,9 @@ var p7 = mkProg();
 check('moveBlock: đổi thứ tự ngay trong thân REPEAT', MB(p7, 'c', 'r', 0) && repBody(p7, 'r') === 'c,b', repBody(p7, 'r'));
 
 // 5) Intro chọn robot + đặt tên: hiện khi chưa chọn, lưu lựa chọn, thay tên vào story, robot đổi hình
+// (về màn 1 trước: lời dẫn màn 1 có chữ "Robot" để kiểm tra việc thay tên)
+byId.btnLevels.click();
+byId.levelGrid.children.slice(-15)[0].click();
 check('Intro: mở game lần đầu có vẽ xem trước cả robot Nữ (intro tự mở)',
   robotCalls.some(function (c) { return c.variant === 'girl'; }),
   'không thấy lần vẽ nào với variant girl');
@@ -187,7 +190,7 @@ check('Intro: đổi robot + tên trống thì dùng tên gợi ý (Bíp)',
 // 6) Thêm REPEAT vào trong REPEAT qua bảng lệnh thật (màn 10, tools: MOVE + REPEAT)
 byId.btnLevels.click();
 byId.levelGrid.children[9].click(); // sang màn 10
-var palRep = byId.palette.children[1]; // nút REPEAT
+var palRep = byId.palette.children.filter(function (c) { return (c.className || '').indexOf('pal-REPEAT') !== -1; })[0]; // nút REPEAT (V7.2 màn 10 có 4 nút)
 function topBlocks() { return byId.program.children.filter(function (c) { return (c.className || '').indexOf('blk ') === 0; }); }
 function bodyBlocks(repEl) { return repEl.children[1].children.filter(function (c) { return (c.className || '').indexOf('blk ') === 0; }); }
 palRep.click(); // REPEAT ngoài, editor tự đặt nó làm đích thêm lệnh

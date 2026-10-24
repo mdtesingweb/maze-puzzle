@@ -14,6 +14,7 @@
         out.done = p.done.filter(function (n) { return typeof n === 'number' && isFinite(n); });
       }
       if (typeof p.sound === 'boolean') out.sound = p.sound;
+      if (typeof p.levelsVersion === 'number' && isFinite(p.levelsVersion)) out.levelsVersion = Math.floor(p.levelsVersion);
       if (p.robot && typeof p.robot === 'object' &&
           (p.robot.gender === 'boy' || p.robot.gender === 'girl') &&
           typeof p.robot.name === 'string' && p.robot.name.trim()) {

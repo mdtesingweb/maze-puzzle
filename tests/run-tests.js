@@ -362,6 +362,14 @@ test('storage: reset -> ve mac dinh', function () {
   assert.deepStrictEqual(st.load(), { unlocked: 1, done: [], sound: true });
 });
 
+test('storage: levelsVersion hop le duoc giu, gia tri hong bi loai (V7.2)', function () {
+  var st = S().create(fakeBackend());
+  st.save({ unlocked: 3, done: [1], sound: true, levelsVersion: 2 });
+  assert.strictEqual(st.load().levelsVersion, 2);
+  st.save({ unlocked: 3, done: [1], sound: true, levelsVersion: 'x' });
+  assert.strictEqual(st.load().levelsVersion, undefined);
+});
+
 test('storage: create() khong backend (Node, khong localStorage) van chay', function () {
   var st = S().create();
   assert.deepStrictEqual(st.load(), { unlocked: 1, done: [], sound: true });
